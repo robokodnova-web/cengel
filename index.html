@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#152d52">
+  <title>Düşüncenin İzinde — Çengel Bulmaca</title>
+  <meta name="description" content="Felsefe ve düşünme kavramlarıyla hazırlanmış etkileşimli çengel bulmaca.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="stage" aria-label="Etkileşimli çengel bulmaca">
+    <div class="rotate-notice" role="status">
+      <div class="rotate-phone" aria-hidden="true">↻</div>
+      <strong>Telefonunuzu yatay çevirin</strong>
+      <span>Bulmaca, yatay ekranda daha rahat okunur ve çözülür.</span>
+    </div>
+    <div class="confetti" aria-hidden="true"></div>
+
+    <header class="hero">
+      <div class="title-tape"><h1>ÇENGEL BULMACA</h1></div>
+      <p class="instruction">Bir kutuya dokunun ve yanıtı <strong>klavyenizden doğrudan yazın.</strong> İsterseniz harf havuzunu da kullanabilirsiniz.</p>
+    </header>
+
+    <section class="game-shell">
+      <aside class="clue-panel left-panel" aria-labelledby="across-title">
+        <div class="panel-heading">
+          <span class="direction-icon">→</span>
+          <div><small>BULMACA CÜMLELERİ</small><h2 id="across-title">Soldan Sağa</h2></div>
+        </div>
+        <div id="across-clues" class="clue-list"></div>
+      </aside>
+
+      <section class="board-wrap" aria-label="Bulmaca alanı">
+        <div class="status-row">
+          <div class="progress-copy"><span id="progress-text">0 / 72 kutu</span><div class="progress-track"><i id="progress-fill"></i></div></div>
+          <div id="message" class="message" aria-live="polite">Bir ipucu seçerek başlayabilirsin.</div>
+        </div>
+        <div id="crossword" class="crossword" role="grid" aria-label="Çengel bulmaca ızgarası"></div>
+        <div class="board-actions">
+          <button id="hint-btn" class="soft-btn" type="button">💡 İpucu</button>
+          <button id="check-btn" class="primary-btn" type="button">✓ Kontrol Et</button>
+          <button id="reset-btn" class="soft-btn" type="button">↻ Sıfırla</button>
+        </div>
+      </section>
+
+      <aside class="clue-panel right-panel" aria-labelledby="down-title">
+        <div class="panel-heading">
+          <span class="direction-icon">↓</span>
+          <div><small>BULMACA CÜMLELERİ</small><h2 id="down-title">Yukarıdan Aşağıya</h2></div>
+        </div>
+        <div id="down-clues" class="clue-list"></div>
+      </aside>
+    </section>
+
+    <section id="letter-dock" class="letter-dock collapsed" aria-labelledby="letters-title">
+      <div class="dock-label">
+        <button id="pool-toggle" class="pool-toggle" type="button" aria-expanded="false" aria-controls="letter-bank">⌃ Harf Havuzunu Aç</button>
+        <small id="letters-title">İsterseniz harfleri buradan da seçebilirsiniz.</small>
+      </div>
+      <div id="letter-bank" class="letter-bank" hidden></div>
+    </section>
+
+    <div id="success-modal" class="modal" hidden>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="success-title">
+        <div class="burst">★</div>
+        <p class="modal-kicker">HARİKA!</p>
+        <h2 id="success-title">Tebrikler, çengel bulmacayı tamamladınız!</h2>
+        <p>Merak ettin, düşündün ve bütün kavramları doğru yerlere taşıdın.</p>
+        <button id="play-again" class="primary-btn" type="button">Tekrar Oyna</button>
+      </div>
+    </div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
