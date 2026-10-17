@@ -271,20 +271,6 @@ function checkForAutomaticCompletion() {
   if (completeAndCorrect) checkAnswers();
 }
 
-function giveHint() {
-  const candidates = [...cells.values()].filter(data => cellValue(data.el) !== data.letter);
-  if (!candidates.length) return checkAnswers();
-  const data = candidates[Math.floor(Math.random() * candidates.length)];
-  if (data.el.dataset.tileId) removeFromCell(data.el);
-  const tile = [...document.querySelectorAll(".tile:not(.used)")].find(t => t.dataset.letter === data.letter);
-  if (!tile) return;
-  placeTile(tile, data.el);
-  data.el.classList.add("correct", "locked");
-  message.textContent = `İpucu: ${data.letter} harfini doğru yerine yerleştirdim.`;
-  updateSolvedClues();
-  checkForAutomaticCompletion();
-}
-
 function resetGame() {
   cells.forEach(data => {
     data.el.classList.remove("wrong", "correct", "locked", "highlight", "target");
@@ -309,7 +295,6 @@ buildTiles();
 updateProgress();
 
 document.querySelector("#check-btn").addEventListener("click", checkAnswers);
-document.querySelector("#hint-btn").addEventListener("click", giveHint);
 document.querySelector("#reset-btn").addEventListener("click", resetGame);
 document.querySelector("#play-again").addEventListener("click", resetGame);
 document.querySelector("#pool-toggle").addEventListener("click", () => {

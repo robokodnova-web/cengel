@@ -215,8 +215,8 @@ h1 {
 }
 
 .clue-text {
-  font-size: clamp(8px, .61vw, 12px);
-  line-height: 1.17;
+  font-size: clamp(10px, .72vw, 14px);
+  line-height: 1.25;
   font-weight: 700;
 }
 .clue-text b { color: var(--magenta); font-size: 1.02em; letter-spacing: .02em; }
@@ -420,7 +420,8 @@ h1 {
 }
 
 @media (max-width: 900px) and (orientation: landscape) {
-  .clue-text { font-size: max(5px, .61vw); line-height: 1.12; }
+  .clue-list { justify-content: flex-start; gap: 4px; overflow-y: auto; }
+  .clue-text { font-size: max(10px, 1.1vw); line-height: 1.2; }
   .clue-number { width: 18px; height: 18px; font-size: 7px; }
   .panel-heading h2 { font-size: max(11px, 1.35vw); }
   .panel-heading small { font-size: max(5px, .5vw); }
