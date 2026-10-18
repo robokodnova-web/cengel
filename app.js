@@ -19,6 +19,8 @@ const message = document.querySelector("#message");
 const progressText = document.querySelector("#progress-text");
 const progressFill = document.querySelector("#progress-fill");
 const modal = document.querySelector("#success-modal");
+const stage = document.querySelector(".stage");
+const fullscreenButton = document.querySelector("#fullscreen-btn");
 const cells = new Map();
 let selectedTile = null;
 let activeEntry = null;
@@ -92,7 +94,12 @@ function buildBoard() {
       if (tile) placeTile(tile, cell);
     });
     cell.addEventListener("click", () => { if (selectedTile) placeTile(selectedTile, cell); else { ensureCellEntry(cell); input.focus(); } });
-    input.addEventListener("focus", () => ensureCellEntry(cell));
+    input.addEventListener("focus", () => {
+      ensureCellEntry(cell);
+      if (window.matchMedia("(max-width: 768px) and (orientation: portrait)").matches) {
+        setTimeout(() => cell.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" }), 180);
+      }
+    });
     input.addEventListener("input", () => handleTypedInput(cell, input));
     input.addEventListener("keydown", e => handleCellKeydown(e, cell));
     board.append(cell);
@@ -307,3 +314,34 @@ document.querySelector("#pool-toggle").addEventListener("click", () => {
   button.setAttribute("aria-expanded", String(willOpen));
   button.textContent = willOpen ? "⌄ Harf Havuzunu Kapat" : "⌃ Harf Havuzunu Aç";
 });
+
+const fullscreenSupported = Boolean(stage.requestFullscreen || stage.webkitRequestFullscreen);
+fullscreenButton.hidden = !fullscreenSupported;
+
+function currentFullscreenElement() {
+  return document.fullscreenElement || document.webkitFullscreenElement;
+}
+
+function updateFullscreenButton() {
+  const isFullscreen = Boolean(currentFullscreenElement());
+  fullscreenButton.setAttribute("aria-label", isFullscreen ? "Tam ekrandan çık" : "Tam ekrana geç");
+  fullscreenButton.innerHTML = isFullscreen ? "× <span>Tam Ekrandan Çık</span>" : "⛶ <span>Tam Ekran</span>";
+}
+
+fullscreenButton.addEventListener("click", async () => {
+  try {
+    if (currentFullscreenElement()) {
+      const exitFullscreen = document.exitFullscreen || document.webkitExitFullscreen;
+      await exitFullscreen?.call(document);
+    } else {
+      const requestFullscreen = stage.requestFullscreen || stage.webkitRequestFullscreen;
+      await requestFullscreen.call(stage);
+    }
+  } catch {
+    message.textContent = "Tarayıcı tam ekranı açamadı; menüden ‘Ana ekrana ekle’ seçeneğini kullanabilirsin.";
+  }
+});
+
+document.addEventListener("fullscreenchange", updateFullscreenButton);
+document.addEventListener("webkitfullscreenchange", updateFullscreenButton);
+updateFullscreenButton();

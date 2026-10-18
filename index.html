@@ -2,8 +2,11 @@
 <html lang="tr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#152d52">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Düşüncenin İzinde — Çengel Bulmaca</title>
   <meta name="description" content="Felsefe ve düşünme kavramlarıyla hazırlanmış etkileşimli çengel bulmaca.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,11 +16,7 @@
 </head>
 <body>
   <main class="stage" aria-label="Etkileşimli çengel bulmaca">
-    <div class="rotate-notice" role="status">
-      <div class="rotate-phone" aria-hidden="true">↻</div>
-      <strong>Telefonunuzu yatay çevirin</strong>
-      <span>Bulmaca, yatay ekranda daha rahat okunur ve çözülür.</span>
-    </div>
+    <button id="fullscreen-btn" class="fullscreen-btn" type="button" aria-label="Tam ekrana geç">⛶ <span>Tam Ekran</span></button>
     <div class="confetti" aria-hidden="true"></div>
 
     <header class="hero">

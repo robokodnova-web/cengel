@@ -12,7 +12,7 @@
 
 * { box-sizing: border-box; }
 
-html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+html, body { width: 100%; height: 100%; min-height: 100%; margin: 0; overflow: hidden; }
 
 body {
   display: grid;
@@ -37,6 +37,37 @@ button { font: inherit; }
     linear-gradient(145deg, #173a63 0%, #162b50 54%, #451f57 100%);
   box-shadow: 0 20px 60px #0008;
 }
+
+.stage:fullscreen,
+.stage:-webkit-full-screen {
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+}
+
+.fullscreen-btn {
+  position: absolute;
+  top: max(12px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  gap: .45em;
+  border: 1px solid rgba(255,255,255,.32);
+  border-radius: 999px;
+  padding: .48em .85em;
+  color: #fff;
+  background: rgba(7,24,48,.74);
+  box-shadow: 0 4px 12px rgba(0,0,0,.22);
+  font-size: clamp(10px, .72vw, 14px);
+  font-weight: 900;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+
+.fullscreen-btn:hover { background: rgba(20,57,96,.94); }
+.fullscreen-btn[hidden] { display: none; }
 
 .stage::after {
   content: "";
@@ -410,8 +441,6 @@ h1 {
 .modal h2 { margin: .15em 0; color: var(--navy); font-family: "Baloo 2"; font-size: clamp(22px, 2vw, 38px); line-height: 1.05; }
 .modal p:not(.modal-kicker) { margin: .4em 0 1.2em; font-size: clamp(10px, .85vw, 16px); }
 
-.rotate-notice { display: none; }
-
 @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 @keyframes pop { from { transform: scale(.6) rotate(-3deg); opacity: 0; } }
 
@@ -431,26 +460,130 @@ h1 {
 }
 
 @media (max-width: 768px) and (orientation: portrait) {
-  .rotate-notice {
+  :root { --cell: calc((100vw - 34px) / 15); }
+
+  body { display: block; }
+
+  .stage,
+  .stage:fullscreen,
+  .stage:-webkit-full-screen {
+    width: 100vw;
+    height: 100dvh;
+    min-width: 0;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    scroll-behavior: smooth;
+  }
+
+  .fullscreen-btn {
     position: fixed;
-    inset: 0;
-    z-index: 100;
+    top: max(8px, env(safe-area-inset-top));
+    right: max(8px, env(safe-area-inset-right));
+    padding: .55em .75em;
+    font-size: 11px;
+  }
+
+  .hero {
+    height: auto;
+    min-height: 118px;
+    padding: 18px 52px 10px 12px;
+  }
+
+  .title-tape { min-width: 88%; padding: 5px 18px 2px; }
+  h1 { font-size: clamp(28px, 9vw, 42px); }
+  .instruction { width: 96%; margin-top: 10px; font-size: 12px; }
+
+  .game-shell {
+    height: auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    padding: 28px;
-    color: white;
-    background: radial-gradient(circle at 50% 35%, #264f79, #102747 64%);
-    text-align: center;
+    gap: 14px;
+    padding: 0 10px 18px;
   }
-  .rotate-notice strong { color: var(--yellow); font-family: "Baloo 2"; font-size: 26px; line-height: 1.05; }
-  .rotate-notice span { max-width: 290px; font-size: 14px; line-height: 1.35; opacity: .85; }
-  .rotate-phone { display: grid; place-items: center; width: 82px; height: 126px; border: 5px solid #fff; border-radius: 15px; font-size: 42px; animation: turnPhone 1.8s ease-in-out infinite; }
-}
 
-@keyframes turnPhone { 0%, 20% { transform: rotate(0); } 65%, 100% { transform: rotate(90deg); } }
+  .board-wrap {
+    order: 1;
+    display: grid;
+    grid-template-rows: 38px auto 46px;
+    padding: 4px 0 8px;
+  }
+
+  .status-row { padding: 0 5px; font-size: 9px; }
+  .progress-track { width: 74px; }
+  .message { max-width: 52%; }
+
+  .crossword {
+    width: calc(var(--cell) * 15);
+    height: calc(var(--cell) * 12);
+    margin: 8px auto 4px;
+  }
+
+  .cell { border-width: 1px; }
+  .cell-number { border-width: 1px; }
+  .cell-input:focus { outline-width: 2px; outline-offset: -2px; }
+
+  .board-actions { align-items: center; gap: 8px; }
+  .board-actions button { padding: .62em 1.15em; font-size: 11px; }
+
+  .clue-panel {
+    height: auto;
+    min-height: 0;
+    padding: 12px 14px 14px;
+    border-radius: 14px;
+    box-shadow: 0 6px 0 rgba(4,19,39,.28), inset 0 0 0 3px rgba(255,255,255,.65);
+  }
+
+  .left-panel { order: 2; }
+  .right-panel { order: 3; }
+  .panel-heading { padding-bottom: 8px; }
+  .direction-icon { width: 34px; height: 34px; font-size: 19px; }
+  .panel-heading small { font-size: 7px; }
+  .panel-heading h2 { font-size: 20px; }
+
+  .clue-list {
+    height: auto;
+    gap: 4px;
+    padding-top: 8px;
+  }
+
+  .clue {
+    grid-template-columns: 25px 1fr;
+    gap: 7px;
+    padding: 6px 4px;
+    border-radius: 7px;
+  }
+
+  .clue-number { width: 23px; height: 23px; font-size: 9px; }
+  .clue-text { font-size: 12px; line-height: 1.32; }
+
+  .letter-dock,
+  .letter-dock.collapsed {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    width: calc(100% - 20px);
+    height: auto;
+    min-height: 54px;
+    margin: 0 10px 16px;
+    padding: 10px;
+    grid-template-columns: 1fr;
+    border-radius: 14px;
+  }
+
+  .dock-label,
+  .letter-dock.collapsed .dock-label { padding: 0; justify-content: center; }
+  .dock-label small { display: none !important; }
+  .letter-bank { padding-top: 8px; gap: 6px; }
+  .tile { width: 34px; height: 34px; border-radius: 6px; font-size: 14px; }
+
+  .modal { position: fixed; }
+  .modal-card { width: min(88%, 430px); padding: 38px 22px 24px; border-radius: 20px; }
+  .burst { width: 58px; height: 58px; margin-top: -66px; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
